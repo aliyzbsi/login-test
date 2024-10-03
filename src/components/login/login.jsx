@@ -98,6 +98,7 @@ function Login() {
             type="email"
             id="email"
             name="email"
+            data-cy="email"
             placeholder="Email Adresinizi Giriniz !"
             value={loginForm.email}
             onChange={handleChange}
@@ -114,7 +115,7 @@ function Login() {
             placeholder="Şifrenizi Giriniz !"
             value={loginForm.password}
             onChange={handleChange}
-            invalid={!!hata.password} // Hatalı giriş durumunu burada kontrol ediyoruz
+            invalid={!!hata.password}
           />
           {hata.password && <FormFeedback>{hata.password}</FormFeedback>}
         </FormGroup>
@@ -132,12 +133,16 @@ function Login() {
           </Label>
           {hata.terms && <FormFeedback>{hata.terms}</FormFeedback>}
         </FormGroup>
-        <Button disabled={!isValid} type="submit" color="primary">
+        <Button
+          disabled={!isValid}
+          name="loginbtn"
+          type="submit"
+          color="primary"
+        >
           Kaydet
         </Button>
       </Form>
       {user ? <Success /> : <p>Hatalı Giriş!</p>}{" "}
-      {/* Kullanıcı durumu burada kontrol ediliyor */}
     </div>
   );
 }
