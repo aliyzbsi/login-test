@@ -1,10 +1,24 @@
 {
   "users": [
-    { "id": 1, "name": "Ali", "email": "ali@example.com" },
-    { "id": 2, "name": "Ayşe", "email": "ayse@example.com" }
-  ],
-  "posts": [
-    { "id": 1, "title": "JSON Server ile çalışmak", "author": "Ali" },
-    { "id": 2, "title": "REST API Simülasyonu", "author": "Ayşe" }
+    {
+      "createdAt": "2023-11-08T18:21:53.919Z",
+      "name": "Ali Yüzbaşı",
+      "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/915.jpg",
+      "password": "123456",
+      "email": "aliyzbsi68@hotmail.com",
+      "token": "no$7a#G^[V",
+      "user": "aliyzbsi",
+      "id": "1"
+    },
+    {
+      "createdAt": "2023-11-08T18:21:53.919Z",
+      "name": "Erdem Guntay",
+      "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/915.jpg",
+      "password": "erdem123",
+      "email": "erdem.guntay@wit.com.tr",
+      "token": "no$7a#G^[V",
+      "user": "Erdem78",
+      "id": "2"
+    }
   ]
 }
