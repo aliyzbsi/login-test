@@ -1,51 +1,92 @@
-import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import {
+  Button,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+} from "reactstrap";
 import Success from "../success/Success";
 import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useEffect } from "react";
 
 const base_url = "http://localhost:3100";
 
+const errorMessages = {
+  email: "Geçersiz e-posta adresi",
+  password: "Şifre en az 4 karakter olmalıdır",
+  terms: "Kullanım şartlarını kabul etmelisiniz",
+};
+
 function Login() {
   const history = useHistory();
+  const [isValid, setIsValid] = useState(true);
+  const [hata, setHata] = useState(errorMessages);
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
     terms: false,
   });
+  const [user, setUser] = useState(null); // Kullanıcı durumunu tanımladık
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
 
     if (type === "checkbox") {
       setLoginForm({ ...loginForm, [name]: checked });
-      console.log(value);
     } else {
       setLoginForm({ ...loginForm, [name]: value });
-      console.log(value);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!isValid) {
+      return; // Eğer form geçerli değilse çık
+    }
+
     try {
       const response = await axios.get(base_url + "/users");
-      const user = response.data.find(
+      const foundUser = response.data.find(
         (user) =>
           user.email === loginForm.email && user.password === loginForm.password
       );
 
-      if (user) {
+      if (foundUser) {
+        setUser(foundUser); // Kullanıcı bilgilerini duruma kaydediyoruz
         history.push("/success");
       } else {
         console.log("Hatalı Giriş");
+        setHata({ ...hata, email: "", password: "Hatalı giriş" });
       }
     } catch (error) {
       console.log(error);
     }
+  };
 
-    console.log("submit edildi", loginForm);
+  useEffect(() => {
+    const emailCheck = validateEmail(loginForm.email);
+    const passwordCheck = loginForm.password.length >= 4;
+    const termsCheck = loginForm.terms;
+
+    setIsValid(emailCheck && passwordCheck && termsCheck);
+
+    setHata({
+      email: emailCheck ? "" : errorMessages.email,
+      password: passwordCheck ? "" : errorMessages.password,
+      terms: termsCheck ? "" : errorMessages.terms,
+    });
+  }, [loginForm]);
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
   };
 
   return (
@@ -60,7 +101,9 @@ function Login() {
             placeholder="Email Adresinizi Giriniz !"
             value={loginForm.email}
             onChange={handleChange}
+            invalid={!!hata.email}
           />
+          {hata.email && <FormFeedback>{hata.email}</FormFeedback>}
         </FormGroup>
         <FormGroup>
           <Label htmlFor="password">ŞİFRE</Label>
@@ -71,7 +114,9 @@ function Login() {
             placeholder="Şifrenizi Giriniz !"
             value={loginForm.password}
             onChange={handleChange}
+            invalid={!!hata.password} // Hatalı giriş durumunu burada kontrol ediyoruz
           />
+          {hata.password && <FormFeedback>{hata.password}</FormFeedback>}
         </FormGroup>
         <FormGroup>
           <Input
@@ -80,16 +125,19 @@ function Login() {
             id="terms"
             checked={loginForm.terms}
             onChange={handleChange}
+            invalid={!!hata.terms}
           />
           <Label htmlFor="terms">
             I agree to terms of service and privacy policy
           </Label>
+          {hata.terms && <FormFeedback>{hata.terms}</FormFeedback>}
         </FormGroup>
-        <Button disabled={!loginForm.terms} type="submit" color="primary">
+        <Button disabled={!isValid} type="submit" color="primary">
           Kaydet
         </Button>
       </Form>
-      <Success />
+      {user ? <Success /> : <p>Hatalı Giriş!</p>}{" "}
+      {/* Kullanıcı durumu burada kontrol ediliyor */}
     </div>
   );
 }

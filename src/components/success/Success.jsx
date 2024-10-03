@@ -1,7 +1,7 @@
 function Success() {
   return (
     <div>
-      <h1>Success page</h1>
+      <h1>Success dsa</h1>
     </div>
   );
 }
