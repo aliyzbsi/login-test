@@ -1,0 +1,10 @@
+{
+  "users": [
+    { "id": 1, "name": "Ali", "email": "ali@example.com" },
+    { "id": 2, "name": "Ayşe", "email": "ayse@example.com" }
+  ],
+  "posts": [
+    { "id": 1, "title": "JSON Server ile çalışmak", "author": "Ali" },
+    { "id": 2, "title": "REST API Simülasyonu", "author": "Ayşe" }
+  ]
+}
